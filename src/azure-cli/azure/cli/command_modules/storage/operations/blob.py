@@ -416,6 +416,7 @@ def storage_blob_download_batch(client, source, destination, source_container_na
         return blob.name
 
     source_blobs = collect_blobs(client, source_container_name, pattern)
+    print('----------source_blobs----------', source_blobs)
     blobs_to_download = {}
     for blob_name in source_blobs:
         # remove starting path seperator and normalize

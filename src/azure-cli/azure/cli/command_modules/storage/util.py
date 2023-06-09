@@ -16,6 +16,8 @@ def collect_blobs(blob_service, container, pattern=None):
     return [name for (name, _) in collect_blob_objects(blob_service, container, pattern)]
 
 
+call_num = 0
+
 def collect_blob_objects(blob_service, container, pattern=None):
     """
     List the blob name and blob in the given blob container, filter the blob by comparing their path to
@@ -40,9 +42,13 @@ def collect_blob_objects(blob_service, container, pattern=None):
             container_client = blob_service.get_container_client(container=container)
             blobs = container_client.list_blobs()
         for blob in blobs:
+            global call_num
+            call_num += 1
             try:
                 blob_name = blob.name.encode('utf-8') if isinstance(blob.name, unicode) else blob.name
+                print('   blob_name: ' + blob_name)
             except NameError:
+                print('   blob_name error: ' + str(call_num) + ' ' + blob.name)
                 blob_name = blob.name
 
             if not pattern or _match_path(blob_name, pattern):
